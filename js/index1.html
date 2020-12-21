@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--当前文档显示的语言-->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+   
+
+    <style>
+      .search {
+        width: 300px;
+      }
+
+      #content {
+        width: 300px;
+        margin-top: 200px;
+      }
+      .Item:hover {
+        background-color: #e8e8e8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="search">
+      <div class="input">
+        <input id="inp" type="text" placeholder="请输入歌手名字" />
+        <button onclick="SearchOPI()">搜寻</button>
+      </div>
+      <div class="result"></div>
+    </div>
+				
+    <div id="content"></div>
+    
+    <h1 id="show"></h1>
+    <audio autoplay  id="audio"></audio>
+    
+    </script>
+  </body>
+   <script src="./jquery-1.12.4.js"></script>
+   <script type="text/javascript">
+   	//
+			      let data;
+			      let Btnvalue;
+			      $.ajax({
+			        type: "get",
+			        url: "./data1.json",
+			        async: false,
+			        dataType: "json",
+			        contenttype: "application/json",
+			        success: function (res) {
+			          data = res.datas;
+			        },
+			      });
+			      //修饰变量
+      const input = document.getElementById("inp");
+      const ItemRes = document.getElementsByClassName("ItemRes");
+      const result = document.getElementsByClassName("result")[0];
+      const content = document.getElementById("content");
+      const show = document.getElementById("show");
+
+      const audio = document.getElementById("audio");
+
+      input.addEventListener("keyup", (event) => {
+        const value = event.target.value;
+        if (value == "") return;
+        Btnvalue = value;
+        result.innerHTML = "";
+        addClick(result,value)
+      });
+//表示页面提交
+      function SearchOPI() {
+  			addClick(content,Btnvalue)
+  			
+      }
+//返回值
+      function Result(value) {
+        const arr = data.filter((v) => {
+          return v.name.indexOf(value) != -1;
+        });
+        return arr
+      }
+
+      function addClick(parent,value){
+      	//
+        parent.innerHTML = "";
+        const arr = Result(value);
+        arr.forEach((el) => {
+          const item = document.createElement("div");
+          item.className = "ItemRes";
+          item.addEventListener("click", (event) => {
+            audio.setAttribute('controls','controls')
+            audio.src = el.src;
+            show.innerHTML = `正在播放${el.name}的歌曲`;
+          });
+          item.innerHTML = `歌手：${el.name},`;
+          parent.appendChild(item);
+        });
+      }
+   </script>
+</html>

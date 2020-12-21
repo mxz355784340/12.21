@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="btnList"></div>
+    <div id="show"></div>
+
+    <script src="./jquery-1.12.4.js"></script>
+    <script>
+      const divs = document.getElementById("show");
+      const btnList = document.getElementById("btnList");
+
+      let datas;
+      $.ajax({
+        type: "get",
+        url: "./data.json",
+        async: false,
+        dataType: "json",
+        contenttype: "application/json",
+        success: function (res) {
+          datas = res.datas;
+
+          //生成按钮
+          ProductBtn(datas);
+        },
+      });
+
+      function ProductBtn(datas) {
+        let length = datas.length;
+        for (let index = 0; index < length; index++) {
+          const btn = document.createElement("button");
+          btn.innerHTML=`第${index+1}个按钮`
+          btn.onclick = () => {
+            divs.innerHTML = `<div>${datas[index].src}</div>`;
+          };
+          btnList.appendChild(btn)
+        }
+      }
+    </script>
+
+    <script>
+    
+    //  class test{
+    //    constructor(name,age){
+    //      console.log("1");
+    //      console.log(name);
+    //      console.log(age);
+    //    }
+    //  }
+
+    //  class test{
+    //    constructor(name,age,t){
+    //     console.log("2");
+    //      console.log(name);
+    //      console.log(age);
+    //      console.log(t);
+    //    }
+    //  }
+
+    //  const test = new test("小明",18,"测试")
+    </script>
+  </body>
+</html>
